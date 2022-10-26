@@ -30,7 +30,46 @@
     }
   }
 
-  
+  const drawCanvas = (centerX, centerY, radius, startAngle, endAngle, color) => {
+    this.ctx.beginPath()
+    this.ctx.fillStyle = color
+    this.ctx.moveTo(centerX, centerY)
+    this.ctx.arc(centerX, centerY, radius, startAngle, endAngle)
+    this.ctx.closePath()
+    this.ctx.fill()
+  }
+
+  const drawChart = (donutChart, centerX, centerY, fontOption) => {
+    let initial = 0
+    let index = 0
+    let fontSize = fontOption.font.split('px')[0] || 14
+
+    for(const [data, value] of this.datas) {
+      const angleValue = (2 * Math.PI * value) / this.total
+      this.drawCanvas {
+        centerX,
+        centerY,
+        this.radius,
+        initial,
+        initial + angleValue,
+        this.color[index]
+      }
+      this.ctx.moveTo(centerX, centerY)
+
+      const triangleCenterX = Math.cos((initial + angleValue) / 2)
+      const triangleCenterY = Math.sin(initial + angleValue / 2)
+      const labelX = centerX - fontSize + ((2 * this.radius) / 3) * triangleCenterX
+      const labelY = centerY + (this.radius / 2) * triangleCenterY
+      const text = Math.round((100 * value) / this.total) + '%'
+
+      this.ctx.fillStyle = !!fontOption ? fontOption.color : 'black'
+      this.ctx.font = !!fontOption ? fontOption.font : `${fontSize}px arial`
+      this.ctx.fillText(text, labelX, labelY)
+
+      initial += angleValue
+      index++
+    }
+  }
 
   const data = {
     guitar: 30,
@@ -54,6 +93,6 @@
   const chart = new Chart('.canvas', data, option)
   const { width, hetght, radius, colors } = option
   chart.getTotal()
-  chart.drawlegends()
+  //chart.drawlegends()
   chart.drawChart(false, width / 2 - 10 -radius, hetght / 2, labelOption)
 })()
