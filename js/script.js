@@ -29,4 +29,7 @@
     color: '#FFFFFF',
     font: '20px',
   }
+
+  const chart = new Chart('.canvas', data, option)
+  const { width, hetghit, radius, colors } = option
 })()
