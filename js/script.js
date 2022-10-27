@@ -30,7 +30,7 @@
     }
   }
 
-  const drawCanvas = (centerX, centerY, radius, startAngle, endAngle, color) => {
+  drawCanvas = (centerX, centerY, radius, startAngle, endAngle, color) => {
     this.ctx.beginPath()
     this.ctx.fillStyle = color
     this.ctx.moveTo(centerX, centerY)
