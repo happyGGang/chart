@@ -1,10 +1,7 @@
 ;(function () {
   'use strict'
 
-  const get = (element) => {
-    document.querySelector(element)
-  }
-
+  const get = (element) => document.querySelector(element)
   class Chart {
     constructor(parent = 'body', data = {}, { width, height, radius, colors }) {
       this.parent = get(parent)
@@ -22,77 +19,79 @@
       this.radius = radius
       this.colors = colors
     }
-  }
 
-  const getTotal = () => {
-    for(const [data, value] of this.datas) {
-      this.total += value
-    }
-  }
-
-  drawCanvas = (centerX, centerY, radius, startAngle, endAngle, color) => {
-    this.ctx.beginPath()
-    this.ctx.fillStyle = color
-    this.ctx.moveTo(centerX, centerY)
-    this.ctx.arc(centerX, centerY, radius, startAngle, endAngle)
-    this.ctx.closePath()
-    this.ctx.fill()
-  }
-
-  const drawChart = (donutChart, centerX, centerY, fontOption) => {
-    let initial = 0
-    let index = 0
-    let fontSize = fontOption.font.split('px')[0] || 14
-
-    for(const [data, value] of this.datas) {
-      const angleValue = (2 * Math.PI * value) / this.total
-      this.drawCanvas {
-        centerX,
-        centerY,
-        this.radius,
-        initial,
-        initial + angleValue,
-        this.color[index]
+    getTotal = () => {
+      for (const [data, value] of this.datas) {
+        this.total += value
       }
+    }
+
+    drawCanvas = (centerX, centerY, radius, startAngle, endAngle, color) => {
+      this.ctx.beginPath()
+      this.ctx.fillStyle = color
       this.ctx.moveTo(centerX, centerY)
+      this.ctx.arc(centerX, centerY, radius, startAngle, endAngle)
+      this.ctx.closePath()
+      this.ctx.fill()
+    }
 
-      const triangleCenterX = Math.cos((initial + angleValue) / 2)
-      const triangleCenterY = Math.sin(initial + angleValue / 2)
-      const labelX = centerX - fontSize + ((2 * this.radius) / 3) * triangleCenterX
-      const labelY = centerY + (this.radius / 2) * triangleCenterY
-      const text = Math.round((100 * value) / this.total) + '%'
+    drawChart = (donutChart, centerX, centerY, fontOption) => {
+      let initial = 0
+      let index = 0
+      let fontSize = fontOption.font.split('px')[0] || 14
 
-      this.ctx.fillStyle = !!fontOption ? fontOption.color : 'black'
-      this.ctx.font = !!fontOption ? fontOption.font : `${fontSize}px arial`
-      this.ctx.fillText(text, labelX, labelY)
+      for (const [data, value] of this.datas) {
+        const angleValue = (2 * Math.PI * value) / this.total
+        this.drawCanvas(
+          centerX,
+          centerY,
+          this.radius,
+          initial,
+          initial + angleValue,
+          this.colors[index]
+        )
 
-      initial += angleValue
-      index++
+        this.ctx.moveTo(centerX, centerY)
+
+        const triangleCenterX = Math.cos(initial + angleValue / 2)
+        const triangleCenterY = Math.sin(initial + angleValue / 2)
+        const labelX =
+          centerX - fontSize + ((2 * this.radius) / 3) * triangleCenterX
+        const labelY = centerY + (this.radius / 2) * triangleCenterY
+        const text = Math.round((100 * value) / this.total) + '%'
+
+        this.ctx.fillStyle = !!fontOption ? fontOption.color : 'black'
+        this.ctx.font = !!fontOption ? fontOption.font : `${fontSize}px arial`
+        this.ctx.fillText(text, labelX, labelY)
+
+        initial += angleValue
+        index++
+      }
     }
   }
 
   const data = {
     guitar: 30,
     bass: 20,
-    drun: 18,
-    piano: 18
+    drum: 25,
+    piano: 18,
   }
 
   const option = {
     radius: 150,
     width: 700,
-    hetght: 500,
-    colors: ['#c15454', '#6fd971', '#687bd2', '#b971e0']
+    height: 500,
+    colors: ['#c15454', '#6fd971', '#687bd2', '#b971e0'],
   }
 
   const labelOption = {
-    color: '#FFFFFF',
-    font: '20px',
+    color: '#fff',
+    font: "20px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
   }
 
   const chart = new Chart('.canvas', data, option)
-  const { width, hetght, radius, colors } = option
+  const { width, height, radius } = option
   chart.getTotal()
   //chart.drawlegends()
-  chart.drawChart(false, width / 2 - 10 -radius, hetght / 2, labelOption)
+  chart.drawChart(false, width / 2 - 10 -radius, height / 2, labelOption)
 })()
