@@ -6,11 +6,11 @@
   }
 
   class Chart {
-    constructor(parent = 'body', data = {}, { width, hetght, radius, colors }) {
+    constructor(parent = 'body', data = {}, { width, height, radius, colors }) {
       this.parent = get(parent)
       this.canvas = document.createElement('canvas')
       this.canvas.width = width
-      this.canvas.height = hetght
+      this.canvas.height = height
       this.ctx = this.canvas.getContext('2d')
       this.legends = document.createElement('div')
       this.legends.classList.add('legends')
